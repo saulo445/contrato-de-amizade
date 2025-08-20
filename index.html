@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato de Melhores Amigos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a00e0;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #8e2de2;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.2);
+        }
+        
+        .contract-preview {
+            background: #f9f7ff;
+            border: 2px dashed #8e2de2;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .contract-preview h3 {
+            text-align: center;
+            color: #4a00e0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .clause {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .clause:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #8e2de2;
+            font-weight: bold;
+        }
+        
+        .signature-area {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .signature {
+            text-align: center;
+            margin: 15px;
+        }
+        
+        .signature-line {
+            width: 200px;
+            height: 1px;
+            background: #333;
+            margin: 5px auto;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: white;
+            box-shadow: 0 4px 15px rgba(142, 45, 226, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(142, 45, 226, 0.6);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #8e2de2;
+            border: 2px solid #8e2de2;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0ebfa;
+        }
+        
+        .download-info {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f3f0ff;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .signature-area {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pacto de Melhores Amigos</h1>
+            <p class="subtitle">Celebre sua amizade com um contrato especial</p>
+        </header>
+        
+        <div class="content">
+            <div class="form-section">
+                <div class="input-group">
+                    <label for="friend-name">Nome da sua amiga:</label>
+                    <input type="text" id="friend-name" placeholder="Digite o nome completo" autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <label for="your-name">Seu nome:</label>
+                    <input type="text" id="your-name" placeholder="Digite seu nome completo" autocomplete="off">
+                </div>
+            </div>
+            
+            <div class="contract-preview">
+                <h3>CONTRATO DE MELHORES AMIGOS</h3>
+                
+                <p>Nós, <span id="preview-your-name">________________</span> e <span id="preview-friend-name">________________</span>, 
+                neste dia tao especial (e um pouco atrasado, apos comemorarmos 5 meses de uma amizade ininterrupta) em <span id="current-date"></span>, solenemente juramos perante este documento:</p>
+                
+                <div class="clause">Prometemos ser melhores amigos um do outro, através dos tempos bons e ruins.</div>
+                
+                <div class="clause">Comprometemo-nos a sempre ouvir, apoiar e respeitar um ao outro, mesmo quando discordarmos.</div>
+                
+                <div class="clause">Juramos compartilhar alegrias, tristezas, segredos e, quando apropriado, lanches.</div>
+                
+                <div class="clause">Prometemos ser honestos um com o outro, mas sempre com gentileza.</div>
+                
+                <div class="clause">Comprometemo-nos a comemorar as vitórias um do outro como se fossem nossas próprias.</div>
+                
+                <div class="clause">E acima de tudo, juramos valorizar e nutrir esta amizade, hoje e sempre.</div>
+                
+                <div class="signature-area">
+                    <div class="signature">
+                        <div>Assinatura:</div>
+                        <div class="signature-line"></div>
+                        <div id="preview-your-name-signature">________________</div>
+                    </div>
+                    
+                    <div class="signature">
+                        <div>Assinatura:</div>
+                        <div class="signature-line"></div>
+                        <div id="preview-friend-name-signature">________________</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-primary" id="generate-pdf">Gerar PDF do Contrato</button>
+                <button class="btn-secondary" id="reset-form">Limpar Formulário</button>
+            </div>
+            
+            <p class="download-info">Após preencher os nomes, clique no botão para gerar e baixar o contrato em PDF.</p>
+        </div>
+        
+        <footer>
+            <p>Este contrato é um símbolo de amizade e não possui valor legal - apenas sentimental! 💖</p>
+        </footer>
+    </div>
+
+    <script>
+        // Atualizar data atual
+        const now = new Date();
+        const formattedDate = now.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        document.getElementById('current-date').textContent = formattedDate;
+        
+        // Elementos do DOM
+        const friendNameInput = document.getElementById('friend-name');
+        const yourNameInput = document.getElementById('your-name');
+        const previewFriendName = document.getElementById('preview-friend-name');
+        const previewYourName = document.getElementById('preview-your-name');
+        const previewFriendNameSignature = document.getElementById('preview-friend-name-signature');
+        const previewYourNameSignature = document.getElementById('preview-your-name-signature');
+        const generatePdfButton = document.getElementById('generate-pdf');
+        const resetFormButton = document.getElementById('reset-form');
+        
+        // Atualizar preview em tempo real
+        friendNameInput.addEventListener('input', function() {
+            const name = this.value.trim() || '________________';
+            previewFriendName.textContent = name;
+            previewFriendNameSignature.textContent = name;
+        });
+        
+        yourNameInput.addEventListener('input', function() {
+            const name = this.value.trim() || '________________';
+            previewYourName.textContent = name;
+            previewYourNameSignature.textContent = name;
+        });
+        
+        // Gerar PDF
+        generatePdfButton.addEventListener('click', function() {
+            if (!friendNameInput.value.trim() || !yourNameInput.value.trim()) {
+                alert('Por favor, preencha ambos os nomes antes de gerar o PDF.');
+                return;
+            }
+            
+            // Usando html2canvas e jsPDF para gerar o PDF
+            const { jsPDF } = window.jspdf;
+            
+            // Capturar o elemento do contrato
+            const contractElement = document.querySelector('.contract-preview');
+            
+            html2canvas(contractElement, {
+                scale: 2,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 190;
+                const pageHeight = 280;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 10;
+                
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                // Adicionar mais páginas se necessário
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                // Baixar o PDF
+                pdf.save('Contrato-de-Amizade-' + yourNameInput.value.trim() + '-e-' + friendNameInput.value.trim() + '.pdf');
+                
+                // Feedback visual
+                generatePdfButton.textContent = 'PDF Gerado com Sucesso!';
+                generatePdfButton.style.background = 'linear-gradient(to right, #00b09b, #96c93d)';
+                setTimeout(() => {
+                    generatePdfButton.textContent = 'Gerar PDF do Contrato';
+                    generatePdfButton.style.background = 'linear-gradient(to right, #8e2de2, #4a00e0)';
+                }, 2000);
+            });
+        });
+        
+        // Limpar formulário
+        resetFormButton.addEventListener('click', function() {
+            friendNameInput.value = '';
+            yourNameInput.value = '';
+            previewFriendName.textContent = '________________';
+            previewYourName.textContent = '________________';
+            previewFriendNameSignature.textContent = '________________';
+            previewYourNameSignature.textContent = '________________';
+        });
+    </script>
+</body>
+</html>
